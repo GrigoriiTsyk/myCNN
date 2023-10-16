@@ -33,6 +33,7 @@ samples = []
 #массив из двух элементов positive/negative
 #делает срез из двух категорий по 5000
 for category in train_df['labels'].unique():
+    #делаем срез из элементов, где labels == @category
     category_slice = train_df.query("labels == @category")
     #выбирает случайно строку 5000 раз без повторений
     samples.append(category_slice.sample(file_count, replace=False, random_state=1))
@@ -110,7 +111,7 @@ model = tf.keras.Sequential([
     tf.keras.layers.GlobalAveragePooling2D(),
     #полносвязный слой, 128 нейронов
     tf.keras.layers.Dense(128, activation='relu'),
-    #
+    #слой батч-нормализации
     tf.keras.layers.BatchNormalization(),
     #чтобы не было переобучения
     tf.keras.layers.Dropout(0.2),
